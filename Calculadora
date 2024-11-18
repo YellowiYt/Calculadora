@@ -1,0 +1,142 @@
+package com.mycompany.calculadora;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+
+public class Calculadora {
+    private JFrame frame;
+    private JTextField textField;
+    private double num1, num2, resultado;
+    private String operador;
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> {
+            try {
+                Calculadora window = new Calculadora();
+                window.frame.setVisible(true);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+    }
+
+    public Calculadora() {
+        initialize();
+    }
+
+    private void initialize() {
+        frame = new JFrame();
+        frame.setBounds(100, 100, 400, 500);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.getContentPane().setLayout(null);
+
+        textField = new JTextField();
+        textField.setBounds(10, 10, 360, 40);
+        textField.setFont(new Font("Arial", Font.PLAIN, 20));
+        frame.getContentPane().add(textField);
+        textField.setColumns(10);
+
+        // Botones
+        JButton btn1 = createButton("1", 10, 60);
+        JButton btn2 = createButton("2", 90, 60);
+        JButton btn3 = createButton("3", 170, 60);
+        JButton btn4 = createButton("4", 10, 130);
+        JButton btn5 = createButton("5", 90, 130);
+        JButton btn6 = createButton("6", 170, 130);
+        JButton btn7 = createButton("7", 10, 200);
+        JButton btn8 = createButton("8", 90, 200);
+        JButton btn9 = createButton("9", 170, 200);
+        JButton btn0 = createButton("0", 90, 270);
+
+        JButton btnSuma = createButton("+", 250, 60);
+        JButton btnResta = createButton("-", 250, 130);
+        JButton btnMultiplicar = createButton("*", 250, 200);
+        JButton btnDividir = createButton("/", 250, 270);
+        JButton btnRaiz = createButton("√", 330, 60);
+        JButton btnPorcentaje = createButton("%", 330, 130);
+        JButton btnCuadrado = createButton("^2", 330, 200);
+        JButton btnLimpiar = createButton("C", 330, 270);
+
+        JButton btnIgual = createButton("=", 170, 270);
+
+        // Funcionalidad de los botones
+        btn1.addActionListener(e -> textField.setText(textField.getText() + "1"));
+        btn2.addActionListener(e -> textField.setText(textField.getText() + "2"));
+        btn3.addActionListener(e -> textField.setText(textField.getText() + "3"));
+        btn4.addActionListener(e -> textField.setText(textField.getText() + "4"));
+        btn5.addActionListener(e -> textField.setText(textField.getText() + "5"));
+        btn6.addActionListener(e -> textField.setText(textField.getText() + "6"));
+        btn7.addActionListener(e -> textField.setText(textField.getText() + "7"));
+        btn8.addActionListener(e -> textField.setText(textField.getText() + "8"));
+        btn9.addActionListener(e -> textField.setText(textField.getText() + "9"));
+        btn0.addActionListener(e -> textField.setText(textField.getText() + "0"));
+
+        btnSuma.addActionListener(e -> setOperador("+"));
+        btnResta.addActionListener(e -> setOperador("-"));
+        btnMultiplicar.addActionListener(e -> setOperador("*"));
+        btnDividir.addActionListener(e -> setOperador("/"));
+        btnRaiz.addActionListener(e -> calcularRaiz());
+        btnPorcentaje.addActionListener(e -> calcularPorcentaje());
+        btnCuadrado.addActionListener(e -> calcularCuadrado());
+        btnLimpiar.addActionListener(e -> textField.setText(""));
+
+        btnIgual.addActionListener(e -> calcularResultado());
+    }
+
+    private JButton createButton(String text, int x, int y) {
+        JButton button = new JButton(text);
+        button.setFont(new Font("Arial", Font.PLAIN, 20));
+        button.setBounds(x, y, 60, 60);
+        frame.getContentPane().add(button);
+        return button;
+    }
+
+    private void setOperador(String operador) {
+        num1 = Double.parseDouble(textField.getText());
+        textField.setText("");
+        this.operador = operador;
+    }
+
+    private void calcularResultado() {
+        num2 = Double.parseDouble(textField.getText());
+        switch (operador) {
+            case "+":
+                resultado = num1 + num2;
+                break;
+            case "-":
+                resultado = num1 - num2;
+                break;
+            case "*":
+                resultado = num1 * num2;
+                break;
+            case "/":
+                if (num2 != 0) {
+                    resultado = num1 / num2;
+                } else {
+                    JOptionPane.showMessageDialog(frame, "Error: División por cero");
+                    return;
+                }
+                break;
+        }
+        textField.setText(String.valueOf(resultado));
+    }
+
+    private void calcularRaiz() {
+        num1 = Double.parseDouble(textField.getText());
+        resultado = Math.sqrt(num1);
+        textField.setText(String.valueOf(resultado));
+    }
+
+    private void calcularPorcentaje() {
+        num1 = Double.parseDouble(textField.getText());
+        resultado = num1 / 100;
+        textField.setText(String.valueOf(resultado));
+    }
+
+    private void calcularCuadrado() {
+        num1 = Double.parseDouble(textField.getText());
+        resultado = Math.pow(num1, 2);
+        textField.setText(String.valueOf(resultado));
+    }
+}
